@@ -27,6 +27,7 @@ import { SidebarProvider } from '@/components/ui-kit/sidebar';
 import { Toaster } from '@/components/ui-kit/toaster';
 import { useLanguageContext } from '@/i18n/language-context';
 import { LoadingOverlay } from '@/components/core';
+import { ChessTournamentPage } from '@/modules/chess-tournament/tournament-page';
 
 export const AppRoutes = () => {
   const { isLoading } = useLanguageContext();
@@ -34,14 +35,19 @@ export const AppRoutes = () => {
   if (isLoading) {
     return <LoadingOverlay />;
   }
+
   return (
-    <div className="min-h-screen bg-background font-sans antialiased relative">
+    <div className="min-h-screen">
       <ClientMiddleware>
         <ThemeProvider>
           <SidebarProvider>
             <Routes>
-              {AuthRoutes}
+              {/* Auth Routes */}
+              <Route path="/" element={<AuthRoutes />} />
+
+              {/* Main App Layout (Protected by Guard) */}
               <Route
+                path="/"
                 element={
                   <Guard>
                     <MainLayout />
@@ -49,6 +55,8 @@ export const AppRoutes = () => {
                 }
               >
                 <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/chess-tournament" element={<ChessTournamentPage />} />
+
                 <Route
                   path="/finance"
                   element={
@@ -57,25 +65,29 @@ export const AppRoutes = () => {
                     </ProtectedRoute>
                   }
                 />
+
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/inventory" element={<InventoryPage />} />
-                <Route path="/inventory/add" element={<InventoryFormPage />} />
-                <Route path="/inventory/:itemId" element={<InventoryDetailsPage />} />
-                <Route path="/activity-log" element={<ActivityLogPage />} />
-                <Route
-                  path="/timeline"
-                  element={
-                    <ProtectedRoute roles={['admin']}>
-                      <TimelinePage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/mail" element={<EmailPage />} />
-                <Route path="/mail/:category" element={<EmailPage />} />
-                <Route path="/mail/:category/:emailId" element={<EmailPage />} />
-                <Route path="/mail/:category/:labels/:emailId" element={<EmailPage />} />
                 <Route path="/identity-management" element={<UsersTablePage />} />
+
+                {/* Inventory */}
+                <Route path="/inventory" element={<InventoryPage />} />
+                <Route path="/inventory/details/:id" element={<InventoryDetailsPage />} />
+                <Route path="/inventory/create" element={<InventoryFormPage />} />
+                <Route path="/inventory/edit/:id" element={<InventoryFormPage />} />
+
+                {/* Invoices */}
+                <Route path="/invoices" element={<InvoicesPage />} />
+                <Route path="/invoices/details/:id" element={<InvoiceDetailsPage />} />
+                <Route path="/invoices/create" element={<CreateInvoicePage />} />
+                <Route path="/invoices/edit/:id" element={<EditInvoicePage />} />
+
+                {/* Other Modules */}
                 <Route path="/task-manager" element={<TaskManagerPage />} />
+                <Route path="/mail/inbox" element={<EmailPage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/activity-log" element={<ActivityLogPage />} />
+                <Route path="/timeline" element={<TimelinePage />} />
+
                 <Route
                   path="/chat"
                   element={
@@ -84,20 +96,13 @@ export const AppRoutes = () => {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/invoices" element={<InvoicesPage />} />
-                <Route path="/invoices/create-invoice" element={<CreateInvoicePage />} />
-                <Route path="/invoices/:invoiceId/edit" element={<EditInvoicePage />} />
-                <Route path="/invoices/:invoiceId" element={<InvoiceDetailsPage />} />
+
+                {/* File Manager Routes */}
                 <Route path="/file-manager/my-files" element={<FileManagerMyFilesPage />} />
                 <Route path="/file-manager/shared-files" element={<SharedWithMePage />} />
                 <Route path="/file-manager/trash" element={<TrashPage />} />
-                <Route
-                  path="/file-manager/my-files/:folderId"
-                  element={<FileManagerMyFilesPage />}
-                />
-                <Route path="/file-manager/shared-files/:folderId" element={<SharedWithMePage />} />
-                <Route path="/file-manager/trash/:folderId" element={<TrashPage />} />
-                <Route path="/calendar" element={<CalendarPage />} />
+
+                {/* Error Pages */}
                 <Route path="/503" element={<ServiceUnavailablePage />} />
                 <Route path="/404" element={<NotFoundPage />} />
               </Route>
@@ -114,6 +119,7 @@ export const AppRoutes = () => {
           </SidebarProvider>
         </ThemeProvider>
       </ClientMiddleware>
+
       <Toaster />
     </div>
   );

@@ -3,10 +3,10 @@
  * Each route is mapped to an array of module names that should be loaded for that route.
  *
  * @type {Record<string, string[]>}
- * @property {string[]} [key] - The application route path
- * @property {string[]} [value] - Array of module names to load for the route
- *                                Always includes 'common' as the base module
- *                                followed by route-specific module names
+ * @property {string[]} [key]   - The application route path
+ * @property {string[]} [value] - Array of module names to load for the route.
+ *                               Always includes 'common' as the base module,
+ *                               followed by route-specific module names.
  */
 export const routeModuleMap: Record<string, string[]> = {
   '/dashboard': ['common', 'dashboard'],
@@ -18,6 +18,7 @@ export const routeModuleMap: Record<string, string[]> = {
   '/activity-log': ['common', 'timeline'],
   '/timeline': ['common', 'timeline'],
   '/task-manager': ['common', 'task-manager'],
+  '/chess-tournament': ['common', 'chess-tournament'],
   '/chat': ['common', 'chat'],
   '/invoices': ['common', 'invoices'],
   '/file-manager': ['common', 'file-manager'],
